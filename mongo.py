@@ -30,6 +30,21 @@ def show_menu():
     return option
 
 
+def get_record():
+    print("--- Get Record By First Name")
+    first = input("Enter first name: ")
+    last = input("Enter last name: ")
+    try:
+        doc = coll.find_one({"first": first.lower(), "last": last.lower()})
+    except:
+        print("Error accessing databases")
+
+    if not doc:
+        print("")
+        print("****No Record Find it****")
+    return doc
+
+
 def add_record():
     print("-------------------")
     first = input("Enter first name: ")
@@ -52,7 +67,7 @@ def main_loop():
         if option == "1":
             add_record()
         elif option == "2":
-            print("You have selected option 2")
+            get_record()
         elif option == "3":
             print("You have selected option 3")
         elif option == "4":
