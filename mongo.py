@@ -31,6 +31,7 @@ def show_menu():
 
 
 def get_record():
+    print("")
     print("--- Get Record By First Name")
     first = input("Enter first name: ")
     last = input("Enter last name: ")
@@ -61,17 +62,63 @@ def add_record():
         print("Error accessing databases")
 
 
+def find_record():
+    print("")
+    doc = get_record()
+    print("")
+    if doc:
+        print("------------------")
+        for k, v in doc.items():
+            if k != "_id":
+                print(k+": "+v.capitalize())
+        print("------------------")
+
+
+def edit_record():
+    doc = get_record()
+    if doc:
+        uppdate_doc = {}
+        for k, v in doc.items():
+            if k != "_id":
+                uppdate_doc[k] = input(k.capitalize() + "[" + v + "]: ").lower()
+                if uppdate_doc[k] == "":
+                    uppdate_doc[k] = v
+        try:
+            coll.update_one(doc, {"$set": uppdate_doc})
+            print("")
+            print("document update it......")
+        except:
+            print("Error accessing databases")
+
+
+def delet_record():
+    doc = get_record()
+    if doc:
+        for k, v in doc.items():
+            if k != "_id":
+                print(k+": "+v.capitalize())
+        confirmation = input("Did you want to delet this record (Y/N): ")
+        if confirmation.lower() == "y":
+            try:
+                coll.remove(doc)
+                print("Document has been removed")
+            except:
+                print("Error accessing databases")
+        else:
+            print("Document Not deleted")
+
+
 def main_loop():
     while True:
         option = show_menu()
         if option == "1":
             add_record()
         elif option == "2":
-            get_record()
+            find_record()
         elif option == "3":
-            print("You have selected option 3")
+            edit_record()
         elif option == "4":
-            print("You have selected option 4")
+            delet_record()
         elif option == "5":
             conn.close()
             break
