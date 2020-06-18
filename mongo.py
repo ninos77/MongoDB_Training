@@ -12,13 +12,15 @@ COLLECTION_NAME = "MyfirstMDB"
 def mongo_connect(url):
     try:
         conn = pymongo.MongoClient(url)
+        print("---------------------")
+        print("Mongo is connected!")
         return conn
     except pymongo.errors.ConnectiolnFailure as e:
         print("Could not connect to MongoDB: %s") % e
 
 
 def show_menu():
-    print("")
+    print("------------------")
     print("1. Add a record")
     print("2. Find a record by Name")
     print("3. Edit a record")
@@ -29,14 +31,16 @@ def show_menu():
 
 
 def add_record():
-    first = input(print("Enter first name: "))
-    last = input(print("Enter last name: "))
-    dob = input(("Enter Date of Berth: "))
-    gender = input(("Enter gender: "))
-    hair_color = input(("Enter hair_color: "))
-
+    print("-------------------")
+    first = input("Enter first name: ")
+    last = input("Enter last name: ")
+    dob = input("Enter Date of Berth: ")
+    gender = input("Enter gender: ")
+    hair_color = input("Enter hair_color: ")
+    new_doc = {"first": first.lower(), "last": last.lower(), "dob": dob, "gender": gender, "hair_color": hair_color}
     try:
-        coll.insert({"first": first.lower(), "last": last.lower(), "dob": dob.lower(), "gender": gender.lower(), "hair_color": hair_color.lower()})
+        coll.insert(new_doc)
+        print("-------------------------------")
         print("Document inserted into database")
     except:
         print("Error accessing databases")
@@ -61,9 +65,6 @@ def main_loop():
         print("")
 
 
-show_menu()
-main_loop()
 conn = mongo_connect(MONGODB_URI)
 coll = conn[DBS_NAME][COLLECTION_NAME]
-
-documents = coll.find()
+main_loop()
